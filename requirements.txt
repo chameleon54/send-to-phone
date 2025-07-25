@@ -1,0 +1,5 @@
+Flask
+pyperclip
+requests
+qrcode[pil]
+tkinterdnd2
