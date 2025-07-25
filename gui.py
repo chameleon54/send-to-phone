@@ -110,79 +110,74 @@ root = TkinterDnD.Tk()
 cancel_flag = tk.BooleanVar(value=False)
 root.title("📱 Send to Phone")
 root.configure(bg="#f2f2f2")
+root.geometry("420x620")
+root.resizable(False, False)
 
 # Setup modern ttk style
 style = ttk.Style()
 style.theme_use("clam")
-style.configure("TButton", font=("Segoe UI", 10), padding=6)
+
+# --- BUTTON STYLE ---
+style.configure("TButton",
+    font=("Segoe UI", 10, "bold"),
+    padding=(10, 8),
+    background="#e0e0e0",
+    foreground="#000",
+    relief="flat")
+
+style.map("TButton",
+    background=[("active", "#d0d0d0")],
+    foreground=[("active", "#000")])
+
+# --- PROGRESS BAR STYLE ---
 style.configure("TProgressbar",
-                thickness=10,
-                troughcolor="#ddd",
-                background="#4CAF50",
-                bordercolor="#f2f2f2")
-# Normal style
-style.configure("TButton",
-    font=("Segoe UI", 10),
-    padding=6,
-    background="#e0e0e0",
-    foreground="#000",
-    relief="flat")
+    thickness=10,
+    troughcolor="#e6e6e6",
+    background="#4CAF50",
+    bordercolor="#f2f2f2")
 
-# Hover effect
-style.map("TButton",
-    background=[("active", "#d0d0d0")],
-    foreground=[("active", "#000")])
-
-style.configure("TButton",
-    font=("Segoe UI", 10, "bold"),   # Make font bold for readability
-    padding=(10, 8),                 # Left/Right = 10px, Top/Bottom = 8px
-    background="#e0e0e0",
-    foreground="#000",
-    relief="flat")
-
-style.map("TButton",
-    background=[("active", "#d0d0d0")],
-    foreground=[("active", "#000")])
-
-
-# Title and IP Display
-tk.Label(root, text="📡 Send to Phone", font=("Segoe UI", 18, "bold"), bg="#f2f2f2").pack(pady=10)
+# --- Title & IP Display ---
+tk.Label(root, text="📡 Send to Phone", font=("Segoe UI", 18, "bold"), bg="#f2f2f2").pack(pady=(15, 5))
 tk.Label(root, text="Your Local IP (scan from phone):", bg="#f2f2f2", font=("Segoe UI", 10)).pack()
-tk.Label(root, text=SERVER_IP, font=("Courier", 12, "bold"), bg="#f2f2f2", fg="#333").pack(pady=5)
+tk.Label(root, text=SERVER_IP, font=("Courier", 12, "bold"), bg="#f2f2f2", fg="#333").pack(pady=(5, 10))
 
-# QR Code
+# --- QR Code ---
 qr = qrcode.make(SERVER_IP)
 qr = qr.resize((180, 180))
 qr_img = ImageTk.PhotoImage(qr)
-tk.Label(root, image=qr_img, bg="#f2f2f2").pack(pady=10)
+tk.Label(root, image=qr_img, bg="#f2f2f2").pack(pady=5)
 
-# Drag & Drop Label
-drop_label = tk.Label(root, text="📥 Drag files here to send to phone", relief="ridge", borderwidth=2,
-                      bg="#ffffff", fg="#444", width=40, height=4, font=("Segoe UI", 10))
-drop_label.pack(pady=10)
+# --- Drag & Drop Label ---
+drop_label = tk.Label(root, text="📥 Drag files here to send to phone",
+                      relief="ridge", borderwidth=2,
+                      bg="#ffffff", fg="#444",
+                      width=40, height=4,
+                      font=("Segoe UI", 10), highlightthickness=1, highlightbackground="#ccc")
+drop_label.pack(pady=(15, 10))
 drop_label.drop_target_register(DND_FILES)
 drop_label.dnd_bind('<<Drop>>', on_drop)
 
-# Upload status
+# --- Upload Status ---
 upload_status = tk.Label(root, text="", bg="#f2f2f2", fg="#444", font=("Segoe UI", 10))
-upload_status.pack(pady=5)
+upload_status.pack(pady=(0, 5))
 
-# Hidden initially - will be shown when uploading
+# --- Progress Bar (Hidden initially) ---
 progress = ttk.Progressbar(root, orient="horizontal", length=300, mode="determinate")
 progress.pack(pady=5)
 progress.pack_forget()
 
+# --- Cancel Button (Hidden initially) ---
 cancel_button = ttk.Button(root, text="❌ Cancel Upload", state="disabled", command=lambda: cancel_flag.set(True))
 cancel_button.pack(pady=5)
 cancel_button.pack_forget()
 
-# File & Clipboard Buttons
-ttk.Button(root, text="📁 Send File", command=send_file).pack(pady=5)
-ttk.Button(root, text="📋 Send Clipboard Text", command=send_clipboard).pack(pady=5)
-ttk.Button(root, text="📥 Get Clipboard from Phone", command=get_clipboard).pack(pady=5)
+# --- Action Buttons ---
+ttk.Button(root, text="📁 Send File", command=send_file).pack(pady=6)
+ttk.Button(root, text="📋 Send Clipboard Text", command=send_clipboard).pack(pady=6)
+ttk.Button(root, text="📥 Get Clipboard from Phone", command=get_clipboard).pack(pady=6)
 
-# Footer
-tk.Label(root, text="Made with ❤️ over LAN", font=("Segoe UI", 8), bg="#f2f2f2", fg="#888").pack(side="bottom", pady=10)
+# --- Footer ---
+tk.Label(root, text="Made with ❤️ over LAN", font=("Segoe UI", 8), bg="#f2f2f2", fg="#888").pack(side="bottom", pady=12)
 
 root.mainloop()
 # ---------------- END OF GUI DESIGN ---------------- #
